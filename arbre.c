@@ -111,32 +111,39 @@ int verifier(int niveau){
     }
 }
 
-t_move* liste_mouve(t_localisation pos, t_map map) {
-    int niveau = 5;
-    t_move* liste = (t_move*) malloc(5 * sizeof(t_move));
-    int nb_mouv;
+int* liste_mouve_9(){
+    int* liste = (int*) malloc(9 * sizeof(int));
     if (liste == NULL) {
-        fprintf(stderr, "probleme liste des mouvements\n");
+        fprintf(stderr, "Erreur d'allocation mémoire pour liste_mouve_9\n");
+        return NULL;
+    int liste[9];
+    for (int i =0; i<9; i++){
+        liste[i]= nb_aleatoire();
+    }
+    return liste;
+}
+
+t_move* liste_mouve(t_localisation pos, t_map map,int* move) {
+    t_move* liste = (t_move*) malloc(niveau * sizeof(t_move));
+
+    if (liste == NULL) {
+        fprintf(stderr, "Erreur d'allocation pour liste des mouvements\n");
         return NULL;
     }
     if (reg_case(pos,map)==1){
-        niveau = 4;
+        niveau = 4;}
+
+    int tmp[9];
+    for (int i = 0; i < 9; i++) {
+        tmp[i] = move[i];
     }
 
-    nb_mouv = verifier(niveau);
+    for (int i = 0; i < niveau; i++) {
+        int random_index = rand() % (9 - i);
+        liste[i] = mouv_aleatoire(tmp[random_index]);
 
-    if (nb_mouv==6) {
-        for (int i = 0; i < niveau; i++) {
-            liste[i] = mouv_aleatoire(nb_aleatoire());
-        }
-    }
-    else if (nb_mouv<5){
-        for (int i = 0; i < nb_mouv; i++) {
-            liste[i] = mouv_aleatoire(nb_aleatoire());}
-    }
-    else if (nb_mouv==5){
-        printf("plus de mouvements");
-    }
+        tmp[random_index] = tmp[8 - i];}
+
     return liste;
 }
 
@@ -145,7 +152,8 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
     if (reg_case(position_actuel,map) == 1){
 
     }
-    t_move *liste_des_mouvements = liste_mouve(position_actuel,map);
+    int* mouv9 = liste_mouve_9();
+    t_move *liste_des_mouvements = liste_mouve(position_actuel,map,mouv9);
     t_move mouv, mouv2, mouv3, mouv4, mouv5;
     t_localisation localisation_actuel, localisation_2, localisation_3, localisation_4, localisation_5;
     int cost[3];
@@ -162,6 +170,13 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
         Node *child = create_node(localisation_actuel, cost[0]);
         arbre->children[arbre->num_children] = child;
         arbre->num_children++;
+        if (cost[0] == 0 ){
+            chemin_min->valeur_min = cost[0];
+            chemin_min->profondeur = 1;  // Profondeur du chemin
+            chemin_min->nodes[0] = arbre;
+            chemin_min->nodes[1] = child;
+            return ;
+        }
 
         for (int j = 0; j < nb_mouv; j++) {
             mouv2 = liste_des_mouvements[j];
@@ -246,8 +261,8 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
         }
         return;
     }
-
-    t_move* liste_des_mouvements = liste_mouve(position_actuel,map);
+    int* mouv9 =liste_mouve_9();
+    t_move* liste_des_mouvements = liste_mouve(position_actuel,map, mouv9);
     t_move mouv;
     t_localisation localisation_actuel;
     int cost[3];

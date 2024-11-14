@@ -11,6 +11,7 @@
 #include "map.h"
 #include "chemin.h"
 #include "moves.h"
+#include "stack.h"
 
 #define nb_enfant_max 4
 
@@ -31,7 +32,8 @@ Node* create_node(t_localisation pos, int valeur) ;
 int nb_aleatoire();
 t_move mouv_aleatoire(int valeur_mouv);
 int verifier(int niveau);
-t_move* liste_mouve(t_localisation pos, t_map map);
+t_move* liste_mouve(t_localisation pos, t_map map,int* move);
+int* liste_mouve_9();
 void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,CheminMin* chemin_min);
 void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_map map, CheminMin* chemin_min);
 
