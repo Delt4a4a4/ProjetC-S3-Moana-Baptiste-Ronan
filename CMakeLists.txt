@@ -13,12 +13,10 @@ add_executable(untitled1 main.c
         queue.c
         queue.h
         stack.c
-<<<<<<< HEAD
         stack.h
         arbre.c
         arbre.h
         chemin.c
-        chemin.h)
-=======
-        stack.h)
->>>>>>> origin/main
+        chemin.h
+)
+
