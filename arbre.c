@@ -115,23 +115,23 @@ int* liste_mouve_9(){
     int* liste = (int*) malloc(9 * sizeof(int));
     if (liste == NULL) {
         fprintf(stderr, "Erreur d'allocation mémoire pour liste_mouve_9\n");
-        return NULL;
-    int liste[9];
+        return NULL;}
     for (int i =0; i<9; i++){
         liste[i]= nb_aleatoire();
     }
     return liste;
 }
 
-t_move* liste_mouve(t_localisation pos, t_map map,int* move) {
+t_move* liste_mouve(t_localisation pos, t_map map,int* move){
+    int niveau = 5;
+    if (reg_case(pos,map)==1){
+        niveau = 4;}
     t_move* liste = (t_move*) malloc(niveau * sizeof(t_move));
 
     if (liste == NULL) {
         fprintf(stderr, "Erreur d'allocation pour liste des mouvements\n");
         return NULL;
     }
-    if (reg_case(pos,map)==1){
-        niveau = 4;}
 
     int tmp[9];
     for (int i = 0; i < 9; i++) {
