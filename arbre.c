@@ -26,7 +26,6 @@ Node* create_node(t_localisation pos, int valeur) {
     for (int i = 0; i < nb_enfant_max; i++){
         new_node->children[i] = NULL;}
     return new_node;
-
 }
 
 int nb_aleatoire(){
