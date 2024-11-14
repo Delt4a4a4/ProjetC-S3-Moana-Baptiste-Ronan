@@ -8,6 +8,7 @@
 
 #define max_mouv 5
 #define nb_enfant_max 4
+
 int avant_10 = 22;
 int avant_20 = 15;
 int avant_30 = 7;
