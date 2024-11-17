@@ -27,7 +27,7 @@ t_localisation translate(t_localisation , t_move);
 
 t_orientation rotate(t_orientation ori, t_move move)
 {
-    int rst = 0;
+    int rst;
     switch (move)
     {
         case T_LEFT:
@@ -142,9 +142,9 @@ char *getMoveAsString(t_move move)
 
 t_localisation move(t_localisation loc, t_move move)
 {
-    t_localisation new_loc = loc;
+    t_localisation new_loc;
     new_loc.ori = rotate(loc.ori, move);
-    new_loc = translate(new_loc, move);
+    new_loc = translate(loc, move);
     return new_loc;
 }
 
