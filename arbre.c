@@ -172,7 +172,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
         arbre->num_children++;
         if (cost[0] == 0 ){
             chemin_min->valeur_min = cost[0];
-            chemin_min->profondeur = 1;  // Profondeur du chemin
+            chemin_min->profondeur = 1;
             chemin_min->nodes[0] = arbre;
             chemin_min->nodes[1] = child;
             return ;
@@ -190,6 +190,13 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
             Node *petit_enfant = create_node(localisation_2, cost[0]);
             child->children[child->num_children] = petit_enfant;
             child->num_children++;
+            if (cost[0] == 0 ){
+                chemin_min->valeur_min = cost[0];
+                chemin_min->profondeur = 2;
+                chemin_min->nodes[0] = arbre;
+                chemin_min->nodes[1] = child;
+                chemin_min->nodes[2] = petit_enfant;
+                return ;}
 
             for (int m = 0; m < nb_mouv; m++) {
                 mouv3 = liste_des_mouvements[m];
@@ -203,6 +210,14 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
                 Node *arriere_enfant = create_node(localisation_3, cost[0]);
                 petit_enfant->children[petit_enfant->num_children] = arriere_enfant;
                 petit_enfant->num_children++;
+                if (cost[0] == 0 ){
+                    chemin_min->valeur_min = cost[0];
+                    chemin_min->profondeur = 3;
+                    chemin_min->nodes[0] = arbre;
+                    chemin_min->nodes[1] = child;
+                    chemin_min->nodes[2] = petit_enfant;
+                    chemin_min->nodes[3] = arriere_enfant;
+                    return ;}
 
                 for (int n = 0; n < nb_mouv; n++) {
                     mouv4 = liste_des_mouvements[n];
@@ -216,6 +231,15 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
                     Node *arriere_arriere_enfant = create_node(localisation_4, cost[0]);
                     arriere_enfant->children[arriere_enfant->num_children] = arriere_arriere_enfant;
                     arriere_enfant->num_children++;
+                    if (cost[0] == 0 ){
+                        chemin_min->valeur_min = cost[0];
+                        chemin_min->profondeur = 4;
+                        chemin_min->nodes[0] = arbre;
+                        chemin_min->nodes[1] = child;
+                        chemin_min->nodes[2] = petit_enfant;
+                        chemin_min->nodes[3] = arriere_enfant;
+                        chemin_min->nodes[4] = arriere_arriere_enfant;
+                        return ;}
 
                     for (int o = 0; o < nb_mouv; o++) {
                         mouv5 = liste_des_mouvements[o];
@@ -232,7 +256,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
 
                         if (cost[0] < chemin_min->valeur_min) {
                             chemin_min->valeur_min = cost[0];
-                            chemin_min->profondeur = 5;  // Profondeur du chemin
+                            chemin_min->profondeur = 5;
                             chemin_min->nodes[0] = arbre;
                             chemin_min->nodes[1] = child;
                             chemin_min->nodes[2] = petit_enfant;
@@ -254,9 +278,9 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
     if (niveau == 0) {
         if (arbre->valeur < chemin_min->valeur_min) {
             chemin_min->valeur_min = arbre->valeur;
-            chemin_min->profondeur = 5 - niveau;  // Profondeur actuelle
+            chemin_min->profondeur = 5 - niveau;
             for (int i = 0; i < 5 - niveau; i++) {
-                chemin_min->nodes[i] = arbre;  // Enregistre le chemin actuel
+                chemin_min->nodes[i] = arbre;
             }
         }
         return;
@@ -280,8 +304,35 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
         arbre->children[arbre->num_children] = enfant;
         arbre->num_children++;
 
+        if (cost[0] == 0) {
+            chemin_min->valeur_min = cost[0];
+            chemin_min->profondeur = 5 - niveau;
+            chemin_min->nodes[5 - niveau] = enfant;
+            for (int j = 0; j <= 5 - niveau; j++) {
+                chemin_min->nodes[j] = arbre;
+                arbre = arbre->children[arbre->num_children - 1];
+            }
+
+            free(liste_des_mouvements);
+            free(mouv9);
+            return;
+        }
+
+        t_move* nouveaux_mouvements = (t_move*) malloc((nb_mouv - 1) * sizeof(t_move));
+        int index = 0;
+        for (int j = 0; j < nb_mouv; j++) {
+            if (j != i) {
+                nouveaux_mouvements[index++] = liste_des_mouvements[j];
+            }
+        }
+
         return arbre_recurcif(enfant, niveau - 1, localisation_actuel, map, chemin_min);
+        if (chemin_min->valeur_min == 0) {
+            free(liste_des_mouvements);
+            free(mouv9);
+            return;}
     }
 
     free(liste_des_mouvements);
+    free(mouv9);
 }
