@@ -30,7 +30,7 @@ Node* create_node(t_localisation pos, int valeur) {
 }
 
 int nb_aleatoire(){
-    int random_number = (rand() % 7) + 1;
+    int random_number = (rand() % 1) + 1;
     printf("Nombre aléatoire entre 1 et 7 : %d\n", random_number);
 
     return random_number;}
@@ -193,7 +193,6 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
         }
         if (cost[0]>100) continue;
 
-
         for (int j = 0; j < 5; j++) {
             if (used_mouv[j]) continue;
 
@@ -254,7 +253,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
 
                 for (int n = 0; n < 5; n++) {
                     if (used_mouv[n]) continue;
-
+                    printf("valeur min %d ", chemin_min->valeur_min);
                     mouv4 = liste_des_mouvements[n];
 
 
@@ -268,7 +267,6 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                     Node* arriere_arriere_enfant = create_node(localisation_4, cost[0]);
                     arriere_enfant->children[arriere_enfant->num_children] = arriere_arriere_enfant;
                     arriere_enfant->num_children++;
-
 
                     if (cost[0] == 0) {
                         chemin_min->valeur_min = cost[0];
@@ -299,16 +297,20 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                         arriere_arriere_enfant->children[arriere_arriere_enfant->num_children] = feuille;
                         arriere_arriere_enfant->num_children++;
 
-                        if (cost[0] < chemin_min->valeur_min) {
+                        if (cost[0] < chemin_min->valeur_min && cost[0]>0) {
                             printf("cost[0] = %d ", cost[0]);
                             chemin_min->valeur_min = cost[0];
+                            printf("valeur min %d ", chemin_min->valeur_min);
                             chemin_min->profondeur = 5;
                             chemin_min->nodes[0] = arbre;
                             chemin_min->nodes[1] = child;
                             chemin_min->nodes[2] = petit_enfant;
                             chemin_min->nodes[3] = arriere_enfant;
                             chemin_min->nodes[4] = arriere_arriere_enfant;
+                            printf("valeur 44min %d ", chemin_min->valeur_min);
                             chemin_min->nodes[5] = feuille;
+                            printf("valeur 55min %d ", chemin_min->valeur_min);
+
                         }
 
                     }
@@ -332,6 +334,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
         }
 
     }
+
 }
 
 
@@ -401,17 +404,27 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
 }
 
 void afficher_node(Node *node, int profondeur) {
-    // Afficher les informations du nœud (position et valeur)
-    printf("Nœud (profondeur %d) : Position (%d, %d), Orientation %d, Valeur %d\n",
+    // Indenter selon la profondeur
+    for (int i = 0; i < profondeur; i++) {
+        printf("  "); // Deux espaces par niveau de profondeur
+    }
+
+    // Afficher les informations du nœud
+    printf("Nœud (Profondeur %d): Position (%d, %d), Orientation %d, Valeur %d\n",
            profondeur, node->pos.pos.x, node->pos.pos.y, node->pos.ori, node->valeur);
 
-    // Parcourir les enfants du nœud et les afficher récursivement
+    // Parcourir les enfants du nœud
     for (int i = 0; i < node->num_children; i++) {
-        afficher_node(node->children[i], profondeur + 1);
+        afficher_node(node->children[i], profondeur + 1); // Appel récursif pour afficher les enfants
     }
 }
 
 void afficher_arbre(Node *racine) {
-    printf("Affichage de l'arbre :\n");
-    afficher_node(racine, 0);  // Commence à la racine avec profondeur 0
+    if (racine == NULL) {
+        printf("L'arbre est vide.\n");
+        return;
+    }
+
+    printf("Affichage de l'arbre:\n");
+    afficher_node(racine, 0); // Commence à la racine avec une profondeur de 0
 }
