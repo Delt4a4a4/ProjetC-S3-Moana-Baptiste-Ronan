@@ -6,7 +6,7 @@
 
 int main() {
     srand(time(NULL));
-    t_map map;
+    t_map map, mapcree;
 
     // The following preprocessor directive checks if the code is being compiled on a Windows system.
     // If either _WIN32 or _WIN64 is defined, it means we are on a Windows platform.
@@ -49,12 +49,25 @@ int main() {
     chemin_min.valeur_min = 10000; // Valeur initiale haute pour la comparaison
     chemin_min.profondeur = 0;
 
+    int largeur = 5;
+    int hauteur = 5;
+
+    // Appel de la fonction pour générer et écrire la carte
+    créer_carte(largeur, hauteur);
+    mapcree =createMapFromFile("..\\maps\\fonction_creation_map.map");
+    display_arbre(mapcree);
+
     // Appel de la fonction arbre_complet ou arbre_recurcif
     // Utilisation de `arbre_complet`
     //arbre_recurcif(arbre, 5, position_actuel, map, &chemin_min);
     arbre_complet(arbre, position_actuel, map, &chemin_min);
     printf(" la feuille avec le meilleur cout est à %d \n", chemin_min.valeur_min);
     // Affichage de l'arbre complet
+    //printf("enfant 0 %d ", arbre->children[4]->valeur);
+    //printf("enfant 1 %d ", arbre->children[1]->children[0]->valeur);
+    //printf("enfant 2 %d ", arbre->children[1]->children[0]->children[0]->valeur);
+    //printf("enfant 3 %d ", arbre->children[1]->children[0]->children[0]->children[0]->valeur);
+    //printf("enfant 3 %d ", arbre->children[1]->children[0]->children[0]->children[0]->children[0]->valeur);
     afficher_arbre(arbre);
 
     return 0;

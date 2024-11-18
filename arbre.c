@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "arbre.h"
+#include <stdbool.h>
 
 #define max_mouv 5
 #define nb_enfant_max 4
@@ -30,7 +31,7 @@ Node* create_node(t_localisation pos, int valeur) {
 }
 
 int nb_aleatoire(){
-    int random_number = (rand() % 1) + 1;
+    int random_number = (rand() % 7) + 1;
     printf("Nombre aléatoire entre 1 et 7 : %d\n", random_number);
 
     return random_number;}
@@ -307,9 +308,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                             chemin_min->nodes[2] = petit_enfant;
                             chemin_min->nodes[3] = arriere_enfant;
                             chemin_min->nodes[4] = arriere_arriere_enfant;
-                            printf("valeur 44min %d ", chemin_min->valeur_min);
                             chemin_min->nodes[5] = feuille;
-                            printf("valeur 55min %d ", chemin_min->valeur_min);
 
                         }
 
@@ -427,4 +426,64 @@ void afficher_arbre(Node *racine) {
 
     printf("Affichage de l'arbre:\n");
     afficher_node(racine, 0); // Commence à la racine avec une profondeur de 0
+}
+
+void créer_carte(int largeur, int hauteur) {
+    // Ouvrir le fichier en mode écriture
+    FILE* fichier = fopen("..\\maps\\fonction_creation_map.map", "w");
+    if (fichier == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        return;
+    }
+    int x = rand() % hauteur;
+    int y = rand() % largeur;
+
+    // Écrire les dimensions dans le fichier
+    fprintf(fichier, "%d\n", largeur);
+    fprintf(fichier, "%d\n", hauteur);
+    int valeur = 0;
+    // Générer et écrire la carte
+    for (int i = 0; i < hauteur; i++) {
+        for (int j = 0; j < largeur; j++) {
+            if (x==i && y ==j){
+                valeur =0 ;
+            }
+            else{
+            valeur = (rand() % 4) + 1;} // Génère un nombre entre 1 et 3
+            fprintf(fichier, "%d ", valeur);
+        }
+        fprintf(fichier, "\n"); // Nouvelle ligne après chaque rangée
+    }
+
+    // Fermer le fichier
+    fclose(fichier);
+    printf("---------------------------------------------------------------------\n");
+    printf("Fichier map créé!\n");
+}
+void display_arbre(t_map map){
+    printf("Map created with dimensions %d x %d\n", map.y_max, map.x_max);
+    for (int i = 0; i < map.y_max; i++)
+    {
+        for (int j = 0; j < map.x_max; j++)
+        {
+            printf("%d ", map.soils[i][j]);
+        }
+        printf("\n");
+    }
+    // printf the costs, aligned left 5 digits
+    for (int i = 0; i < map.y_max; i++)
+    {
+        for (int j = 0; j < map.x_max; j++)
+        {
+            printf("%-5d ", map.costs[i][j]);
+        }
+        printf("\n");
+    }
+    displayMap(map);
+}
+
+t_queue chemin_effetué(CheminMin chemin_min,t_queue file){
+    for (int i =0; i<chemin_min.profondeur;i++){
+        enqueue(&file, chemin_min.nodes[i]->pos.pos);
+    }
 }

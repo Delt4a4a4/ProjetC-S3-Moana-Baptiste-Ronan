@@ -12,6 +12,7 @@
 #include "chemin.h"
 #include "moves.h"
 #include "stack.h"
+#include "queue.h"
 
 #define nb_enfant_max 4
 
@@ -38,7 +39,8 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
 void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_map map, CheminMin* chemin_min);
 void afficher_node(Node *node, int profondeur);
 void afficher_arbre(Node *racine);
-
+void créer_carte(int largeur, int hauteur);
+void display_arbre(t_map map);
 
 
 #endif //UNTITLED1_ARBRE_H
