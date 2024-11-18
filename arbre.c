@@ -173,7 +173,6 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
 
     for (int i = 0; i < 5; i++) {
         mouv = liste_des_mouvements[i];
-        // Marquer ce mouvement comme utilisé
         used_mouv[i] = true;
 
         cost_case_adj(position_actuel, map, mouv, cost);
