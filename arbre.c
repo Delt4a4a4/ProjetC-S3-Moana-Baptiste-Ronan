@@ -486,4 +486,5 @@ t_queue chemin_effetué(CheminMin chemin_min,t_queue file){
     for (int i =0; i<chemin_min.profondeur;i++){
         enqueue(&file, chemin_min.nodes[i]->pos.pos);
     }
+    return file;
 }
