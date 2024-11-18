@@ -57,19 +57,24 @@ int main() {
     mapcree =createMapFromFile("..\\maps\\fonction_creation_map.map");
     display_arbre(mapcree);
 
-    // Appel de la fonction arbre_complet ou arbre_recurcif
     // Utilisation de `arbre_complet`
-    //arbre_recurcif(arbre, 5, position_actuel, map, &chemin_min);
     arbre_complet(arbre, position_actuel, map, &chemin_min);
     printf(" la feuille avec le meilleur cout est à %d \n", chemin_min.valeur_min);
     // Affichage de l'arbre complet
-    //printf("enfant 0 %d ", arbre->children[4]->valeur);
-    //printf("enfant 1 %d ", arbre->children[1]->children[0]->valeur);
-    //printf("enfant 2 %d ", arbre->children[1]->children[0]->children[0]->valeur);
-    //printf("enfant 3 %d ", arbre->children[1]->children[0]->children[0]->children[0]->valeur);
-    //printf("enfant 3 %d ", arbre->children[1]->children[0]->children[0]->children[0]->children[0]->valeur);
     afficher_arbre(arbre);
 
+    // localisation initial en dure ou aleatoire
+    //int x = rand() % 7 ou hauteur;
+    //int y = rand() % 6 ou largeur;
+    //int ori = rand() % 4;
+
+    loc_init(position_actuel.pos.x,position_actuel.pos.y,position_actuel.ori);
+    while (chemin_min.valeur_min != 0 ){
+        arbre_complet(arbre, position_actuel, map, &chemin_min);
+        position_actuel.pos.x = chemin_min.nodes[chemin_min.profondeur]->pos.pos.x;
+        position_actuel.pos.y = chemin_min.nodes[chemin_min.profondeur]->pos.pos.y;
+        position_actuel.ori = chemin_min.nodes[chemin_min.profondeur]->pos.ori;
+    }
     return 0;
 }
 
