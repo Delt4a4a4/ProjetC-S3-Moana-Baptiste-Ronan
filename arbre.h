@@ -36,8 +36,8 @@ t_move* liste_mouve(t_localisation pos, t_map map,int* move);
 int* liste_mouve_9();
 void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,CheminMin* chemin_min);
 void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_map map, CheminMin* chemin_min);
-
-
+void afficher_node(Node *node, int profondeur);
+void afficher_arbre(Node *racine);
 
 
 

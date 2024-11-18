@@ -30,9 +30,8 @@ Node* create_node(t_localisation pos, int valeur) {
 }
 
 int nb_aleatoire(){
-    srand(time(NULL));
     int random_number = (rand() % 7) + 1;
-    //printf("Nombre aléatoire entre 1 et 7 : %d\n", random_number);
+    printf("Nombre aléatoire entre 1 et 7 : %d\n", random_number);
 
     return random_number;}
 
@@ -44,6 +43,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_10--;
+                printf("F10 ");
                 return F_10;
             }
         }
@@ -52,6 +52,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_20-- ;
+                printf("F20 ");
                 return F_20 ;}
         }
         case 3 : {
@@ -59,6 +60,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_30--;
+                printf("F30 ");
                 return F_30;
             }
         }
@@ -67,6 +69,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 arriere--;
+                printf("B10 ");
                 return B_10;
             }
         }
@@ -75,6 +78,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_gauche--;
+                printf("Tleft ");
                 return T_LEFT;
             }
         }
@@ -83,6 +87,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_droite--;
+                printf("Tright ");
                 return T_RIGHT;
             }
         }
@@ -91,6 +96,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_180--;
+                printf("180 ");
                 return U_TURN;
             }
         }
@@ -148,90 +154,124 @@ t_move* liste_mouve(t_localisation pos, t_map map,int* move){
 }
 
 
-void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,CheminMin* chemin_min) {
-    if (reg_case(position_actuel,map) == 1){
+#include <stdbool.h>
 
+void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, CheminMin* chemin_min) {
+    if (reg_case(position_actuel, map) == 1) {
     }
+
     int* mouv9 = liste_mouve_9();
-    t_move *liste_des_mouvements = liste_mouve(position_actuel,map,mouv9);
+    t_move *liste_des_mouvements  = liste_mouve(position_actuel, map, mouv9);
+
     t_move mouv, mouv2, mouv3, mouv4, mouv5;
     t_localisation localisation_actuel, localisation_2, localisation_3, localisation_4, localisation_5;
     int cost[3];
     int nb_mouv = max_mouv;
 
-    for (int i = 0; i < nb_mouv; i++) {
-        mouv = liste_des_mouvements[i];
-        cost_case_adj(position_actuel, map, mouv, cost);
 
+    bool used_mouv[nb_mouv];
+
+    for (int i = 0; i < 5; i++) {
+        mouv = liste_des_mouvements[i];
+        // Marquer ce mouvement comme utilisé
+        used_mouv[i] = true;
+
+        cost_case_adj(position_actuel, map, mouv, cost);
         localisation_actuel.pos.x = cost[1];
         localisation_actuel.pos.y = cost[2];
         localisation_actuel.ori = orientation_cost_case(position_actuel, map, mouv);
 
-        Node *child = create_node(localisation_actuel, cost[0]);
+        Node* child = create_node(localisation_actuel, cost[0]);
         arbre->children[arbre->num_children] = child;
         arbre->num_children++;
-        if (cost[0] == 0 ){
+
+        if (cost[0] == 0) {
             chemin_min->valeur_min = cost[0];
             chemin_min->profondeur = 1;
             chemin_min->nodes[0] = arbre;
             chemin_min->nodes[1] = child;
-            return ;
+            return;
         }
+        if (cost[0]>100) continue;
 
-        for (int j = 0; j < nb_mouv; j++) {
+
+        for (int j = 0; j < 5; j++) {
+            if (used_mouv[j]) continue;
+
             mouv2 = liste_des_mouvements[j];
-            if (mouv2 == mouv) continue;
+
+
+            used_mouv[j] = true;
 
             cost_case_adj(localisation_actuel, map, mouv2, cost);
             localisation_2.pos.x = cost[1];
             localisation_2.pos.y = cost[2];
             localisation_2.ori = orientation_cost_case(localisation_actuel, map, mouv2);
 
-            Node *petit_enfant = create_node(localisation_2, cost[0]);
+            Node* petit_enfant = create_node(localisation_2, cost[0]);
             child->children[child->num_children] = petit_enfant;
             child->num_children++;
-            if (cost[0] == 0 ){
+
+
+            if (cost[0] == 0) {
                 chemin_min->valeur_min = cost[0];
                 chemin_min->profondeur = 2;
                 chemin_min->nodes[0] = arbre;
                 chemin_min->nodes[1] = child;
                 chemin_min->nodes[2] = petit_enfant;
-                return ;}
+                return;
+            }
+            if (cost[0]>100) continue;
 
-            for (int m = 0; m < nb_mouv; m++) {
+
+            for (int m = 0; m < 5; m++) {
+                if (used_mouv[m]) continue;
+
                 mouv3 = liste_des_mouvements[m];
-                if (mouv3 == mouv || mouv3 == mouv2) continue;
+
+
+                used_mouv[m] = true;
 
                 cost_case_adj(localisation_2, map, mouv3, cost);
                 localisation_3.pos.x = cost[1];
                 localisation_3.pos.y = cost[2];
                 localisation_3.ori = orientation_cost_case(localisation_2, map, mouv3);
 
-                Node *arriere_enfant = create_node(localisation_3, cost[0]);
+                Node* arriere_enfant = create_node(localisation_3, cost[0]);
                 petit_enfant->children[petit_enfant->num_children] = arriere_enfant;
                 petit_enfant->num_children++;
-                if (cost[0] == 0 ){
+
+
+                if (cost[0] == 0) {
                     chemin_min->valeur_min = cost[0];
                     chemin_min->profondeur = 3;
                     chemin_min->nodes[0] = arbre;
                     chemin_min->nodes[1] = child;
                     chemin_min->nodes[2] = petit_enfant;
                     chemin_min->nodes[3] = arriere_enfant;
-                    return ;}
+                    return;
+                }
+                if (cost[0]>100) continue;
 
-                for (int n = 0; n < nb_mouv; n++) {
+                for (int n = 0; n < 5; n++) {
+                    if (used_mouv[n]) continue;
+
                     mouv4 = liste_des_mouvements[n];
-                    if (mouv4 == mouv || mouv4 == mouv2 || mouv4 == mouv3) continue;
+
+
+                    used_mouv[n] = true;
 
                     cost_case_adj(localisation_3, map, mouv4, cost);
                     localisation_4.pos.x = cost[1];
                     localisation_4.pos.y = cost[2];
                     localisation_4.ori = orientation_cost_case(localisation_3, map, mouv4);
 
-                    Node *arriere_arriere_enfant = create_node(localisation_4, cost[0]);
+                    Node* arriere_arriere_enfant = create_node(localisation_4, cost[0]);
                     arriere_enfant->children[arriere_enfant->num_children] = arriere_arriere_enfant;
                     arriere_enfant->num_children++;
-                    if (cost[0] == 0 ){
+
+
+                    if (cost[0] == 0) {
                         chemin_min->valeur_min = cost[0];
                         chemin_min->profondeur = 4;
                         chemin_min->nodes[0] = arbre;
@@ -239,21 +279,28 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
                         chemin_min->nodes[2] = petit_enfant;
                         chemin_min->nodes[3] = arriere_enfant;
                         chemin_min->nodes[4] = arriere_arriere_enfant;
-                        return ;}
+                        return;
+                    }
+                    if (cost[0]>100) continue;
 
-                    for (int o = 0; o < nb_mouv; o++) {
+
+                    for (int o = 0; o < 5; o++) {
+                        if (used_mouv[o]) continue;
+
                         mouv5 = liste_des_mouvements[o];
-                        if (mouv5 == mouv || mouv5 == mouv2 || mouv5 == mouv3 || mouv5) continue;
 
-                        cost_case_adj(localisation_3, map, mouv5, cost);
+                        used_mouv[o] = true;
+
+                        cost_case_adj(localisation_4, map, mouv5, cost);
                         localisation_5.pos.x = cost[1];
                         localisation_5.pos.y = cost[2];
                         localisation_5.ori = orientation_cost_case(localisation_4, map, mouv5);
 
-                        Node *feuille = create_node(localisation_5, cost[0]);
+                        Node* feuille = create_node(localisation_5, cost[0]);
                         arriere_arriere_enfant->children[arriere_arriere_enfant->num_children] = feuille;
                         arriere_arriere_enfant->num_children++;
 
+                        printf("cost[0] = %d ", cost[0]);
                         if (cost[0] < chemin_min->valeur_min) {
                             chemin_min->valeur_min = cost[0];
                             chemin_min->profondeur = 5;
@@ -263,15 +310,31 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map,Chemin
                             chemin_min->nodes[3] = arriere_enfant;
                             chemin_min->nodes[4] = arriere_arriere_enfant;
                             chemin_min->nodes[5] = feuille;
-
                         }
+
+                    }
+                    for (int a =0;a<5;a++){
+                        if (a==i || a== j || a == m) continue; {
+                            used_mouv[a] = false;}
                     }
                 }
+                for (int b =0;b<5;b++){
+                    if (b==i || b== j ) continue; {
+                        used_mouv[b] = false;}
+                }
+            }
+            for (int c =0;c<5;c++){
+                if (c==i) continue; {
+                    used_mouv[c] = false;}
             }
         }
-        free(liste_des_mouvements);
+        for (int d = 0; d < nb_mouv; d++) {
+            used_mouv[d] = false;
+        }
+
     }
 }
+
 
 
 void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_map map, CheminMin* chemin_min) {
@@ -293,6 +356,7 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
     int nb_mouv = max_mouv - niveau;
 
     for (int i = 0; i < nb_mouv; i++) {
+        printf("1");
         mouv = liste_des_mouvements[i];
         cost_case_adj(position_actuel, map, mouv, cost);
 
@@ -335,4 +399,20 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
 
     free(liste_des_mouvements);
     free(mouv9);
+}
+
+void afficher_node(Node *node, int profondeur) {
+    // Afficher les informations du nœud (position et valeur)
+    printf("Nœud (profondeur %d) : Position (%d, %d), Orientation %d, Valeur %d\n",
+           profondeur, node->pos.pos.x, node->pos.pos.y, node->pos.ori, node->valeur);
+
+    // Parcourir les enfants du nœud et les afficher récursivement
+    for (int i = 0; i < node->num_children; i++) {
+        afficher_node(node->children[i], profondeur + 1);
+    }
+}
+
+void afficher_arbre(Node *racine) {
+    printf("Affichage de l'arbre :\n");
+    afficher_node(racine, 0);  // Commence à la racine avec profondeur 0
 }
