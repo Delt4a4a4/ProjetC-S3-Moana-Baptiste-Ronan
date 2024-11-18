@@ -23,7 +23,7 @@ typedef struct Node {
 } Node;
 
 typedef struct {
-    Node* nodes[5];
+    Node* nodes[6];
     int profondeur;
     int valeur_min;
 } CheminMin;
