@@ -21,8 +21,8 @@ void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donn
             costAv20 = (robot_x - 2 < 0) ? 10000 : map.costs[robot_x - 2][robot_y];
             costAv30 = (robot_x - 3 < 0) ? 10000 : map.costs[robot_x - 3][robot_y];
             costAr = (robot_x + 1 > map.x_max) ? 10000 : map.costs[robot_x + 1][robot_y];
-            //costG = (robot_y - 1 < 0) ? 10000 : map.costs[robot_x][robot_y - 1];
-            //costD = (robot_y + 1 > map.y_max) ? 10000 : map.costs[robot_x][robot_y + 1];
+            costG = (robot_y - 1 < 0) ? 10000 : map.costs[robot_x][robot_y];
+            costD = (robot_y + 1 > map.y_max) ? 10000 : map.costs[robot_x][robot_y];
 
             if (mouvement == F_10) {
                 donnees[0] = costAv;
@@ -55,8 +55,8 @@ void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donn
             costAv20 = (robot_y + 2 > map.y_max) ? 10000 : map.costs[robot_x][robot_y + 2];
             costAv30 = (robot_y + 3 > map.y_max) ? 10000 : map.costs[robot_x][robot_y + 3];
             costAr = (robot_y - 1 < 0) ? 10000 : map.costs[robot_x][robot_y - 1];
-            //costG = (robot_x - 1 < 0) ? 10000 : map.costs[robot_x - 1][robot_y];
-            //costD = (robot_x + 1 > map.x_max) ? 10000 : map.costs[robot_x + 1][robot_y];
+            costG = (robot_x - 1 < 0) ? 10000 : map.costs[robot_x][robot_y];
+            costD = (robot_x + 1 > map.x_max) ? 10000 : map.costs[robot_x][robot_y];
 
             if (mouvement == F_10){
                 donnees[0] = costAv;
@@ -89,8 +89,8 @@ void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donn
             costAv20 = (robot_x + 2 > map.x_max) ? 10000 : map.costs[robot_x + 2][robot_y];
             costAv30 = (robot_x + 3 > map.x_max) ? 10000 : map.costs[robot_x + 3][robot_y];
             costAr = (robot_x - 1 < 0) ? 10000 : map.costs[robot_x - 1][robot_y];
-            //costD = (robot_y - 1 < 0) ? 10000 : map.costs[robot_x][robot_y - 1];
-            //costG = (robot_y + 1 > map.y_max) ? 10000 : map.costs[robot_x][robot_y + 1];
+            costD = (robot_y - 1 < 0) ? 10000 : map.costs[robot_x][robot_y];
+            costG = (robot_y + 1 > map.y_max) ? 10000 : map.costs[robot_x][robot_y];
 
             if (mouvement == F_10) {
                 donnees[0] = costAv;
@@ -123,8 +123,8 @@ void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donn
             costAv20 = (robot_y - 2 < 0) ? 10000 : map.costs[robot_x][robot_y - 2];
             costAv30 = (robot_y - 3 < 0) ? 10000 : map.costs[robot_x][robot_y - 3];
             costAr = (robot_y + 1 > map.y_max) ? 10000 : map.costs[robot_x][robot_y + 1];
-            //costD = (robot_x - 1 < 0) ? 10000 : map.costs[robot_x - 1][robot_y];
-            //costG = (robot_x + 1 > map.x_max) ? 10000 : map.costs[robot_x + 1][robot_y];
+            costD = (robot_x - 1 < 0) ? 10000 : map.costs[robot_x][robot_y];
+            costG = (robot_x + 1 > map.x_max) ? 10000 : map.costs[robot_x][robot_y];
 
             if (mouvement == F_10) {
                 donnees[0] = costAv;
@@ -214,10 +214,6 @@ t_orientation orientation_cost_case (t_localisation position, t_map map,t_move m
             break;}
 
     }
-    if (mouvement == T_RIGHT) {
-        printf("droite");}
-    else if (mouvement == T_LEFT) {
-        printf("gauche");}
     return (robot_ori);
 }
 

@@ -299,8 +299,8 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                         arriere_arriere_enfant->children[arriere_arriere_enfant->num_children] = feuille;
                         arriere_arriere_enfant->num_children++;
 
-                        printf("cost[0] = %d ", cost[0]);
                         if (cost[0] < chemin_min->valeur_min) {
+                            printf("cost[0] = %d ", cost[0]);
                             chemin_min->valeur_min = cost[0];
                             chemin_min->profondeur = 5;
                             chemin_min->nodes[0] = arbre;
