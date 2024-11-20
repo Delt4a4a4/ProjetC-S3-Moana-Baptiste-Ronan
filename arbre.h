@@ -19,7 +19,7 @@
 typedef struct Node {
     t_localisation pos;
     int valeur;
-    struct Node* children[nb_enfant_max];
+    struct Node* children[nb_enfant_max+1];
     int num_children;
 } Node;
 
@@ -41,6 +41,6 @@ void afficher_node(Node *node, int profondeur);
 void afficher_arbre(Node *racine);
 void créer_carte(int largeur, int hauteur);
 void display_arbre(t_map map);
-
+t_queue chemin_effetue(CheminMin chemin_min,t_queue file);
 
 #endif //UNTITLED1_ARBRE_H

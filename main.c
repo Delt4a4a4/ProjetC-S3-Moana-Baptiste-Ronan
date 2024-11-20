@@ -7,6 +7,8 @@
 int main() {
     srand(time(NULL));
     t_map map, mapcree;
+    t_queue file = createQueue(100);
+
 
     // The following preprocessor directive checks if the code is being compiled on a Windows system.
     // If either _WIN32 or _WIN64 is defined, it means we are on a Windows platform.
@@ -69,12 +71,22 @@ int main() {
     //int ori = rand() % 4;
 
     loc_init(position_actuel.pos.x,position_actuel.pos.y,position_actuel.ori);
+    printf("Début ");
     while (chemin_min.valeur_min != 0 ){
-        arbre_complet(arbre, position_actuel, map, &chemin_min);
+
+        printf("T");
         position_actuel.pos.x = chemin_min.nodes[chemin_min.profondeur]->pos.pos.x;
         position_actuel.pos.y = chemin_min.nodes[chemin_min.profondeur]->pos.pos.y;
         position_actuel.ori = chemin_min.nodes[chemin_min.profondeur]->pos.ori;
+        printf("A");
+        Node* arbre = create_node(position_actuel, 0);
+        arbre_complet(arbre, position_actuel, map, &chemin_min);
+        printf("B");
+        afficher_arbre(arbre);
+        chemin_effetue(chemin_min,file);
     }
+
+    printf("Termine !");
     return 0;
 }
 
