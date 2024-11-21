@@ -32,7 +32,7 @@ Node* create_node(t_localisation pos, int valeur) {
 
 int nb_aleatoire(){
     int random_number = (rand() % 7) + 1;
-    printf("Nombre aléatoire entre 1 et 7 : %d\n", random_number);
+    printf("\nNombre aléatoire entre 1 et 7 : %d", random_number);
 
     return random_number;}
 
@@ -44,7 +44,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_10--;
-                printf("F10 ");
+                printf("\nF10 ");
                 return F_10;
             }
         }
@@ -53,7 +53,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_20-- ;
-                printf("F20 ");
+                printf("\nF20 ");
                 return F_20 ;}
         }
         case 3 : {
@@ -61,7 +61,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 avant_30--;
-                printf("F30 ");
+                printf("\nF30 ");
                 return F_30;
             }
         }
@@ -70,7 +70,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 arriere--;
-                printf("B10 ");
+                printf("\nB10 ");
                 return B_10;
             }
         }
@@ -79,7 +79,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_gauche--;
-                printf("Tleft ");
+                printf("\nTleft ");
                 return T_LEFT;
             }
         }
@@ -88,7 +88,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_droite--;
-                printf("Tright ");
+                printf("\nTright ");
                 return T_RIGHT;
             }
         }
@@ -97,7 +97,7 @@ t_move mouv_aleatoire(int valeur_mouv){
                 return (mouv_aleatoire(nb_aleatoire()));
             } else {
                 tourner_180--;
-                printf("180 ");
+                printf("\n180 ");
                 return U_TURN;
             }
         }
@@ -254,7 +254,6 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
 
                 for (int n = 0; n < 5; n++) {
                     if (used_mouv[n]) continue;
-                    printf("valeur min %d ", chemin_min->valeur_min);
                     mouv4 = liste_des_mouvements[n];
 
 
@@ -299,7 +298,6 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                         arriere_arriere_enfant->num_children++;
 
                         if (cost[0] < chemin_min->valeur_min && cost[0]>0) {
-                            printf("cost[0] = %d ", cost[0]);
                             chemin_min->valeur_min = cost[0];
                             printf("valeur min %d ", chemin_min->valeur_min);
                             chemin_min->profondeur = 5;

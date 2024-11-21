@@ -152,26 +152,18 @@ void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donn
                 donnees[2] = robot_y; }
             break;}
     }
-    if (mouvement == F_10) {
-        printf("avancer :%d  ",costAv);}
-    else if (mouvement == F_20) {
-            printf("avancer de 20 : %d ",costAv20);}
-    else if (mouvement == F_30) {
-        printf("avancer de 30 : %d ",costAv30);}
-    else if (mouvement == B_10) {
-        printf("back : %d ",costAr);}
-    else if (mouvement == T_RIGHT) {
-        printf("droite : %d ",costD);}
-    else if (mouvement == T_LEFT) {
-        printf("gauche : %d ",costG);}
-    //printf("cost start %d\n", map.costs[robot_x ][robot_y]);
-    //printf("10m: %d\n", costAv);
-    //printf("20m: %d\n", costAv20);
-    //printf("30m: %d\n", costAv30);
-    //printf("Derrière: %d\n", costAr);
-    //printf("Gauche: %d\n", costG);
-    //printf("Droite: %d\n", costD);
-
+    //if (mouvement == F_10) {
+    //    printf("avancer :%d  ",costAv);}
+    //else if (mouvement == F_20) {
+    //        printf("avancer de 20 : %d ",costAv20);}
+    //else if (mouvement == F_30) {
+    //    printf("avancer de 30 : %d ",costAv30);}
+    //else if (mouvement == B_10) {
+    //    printf("back : %d ",costAr);}
+    //else if (mouvement == T_RIGHT) {
+    //    printf("droite : %d ",costD);}
+    //else if (mouvement == T_LEFT) {
+    //    printf("gauche : %d ",costG);}
 }
 
 t_orientation orientation_cost_case (t_localisation position, t_map map,t_move mouvement){
