@@ -40,7 +40,7 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
 void afficher_node(Node *node, int profondeur);
 void afficher_arbre(Node *racine);
 void créer_carte(int largeur, int hauteur);
-void display_arbre(t_map map);
+void display_carte(t_map map);
 t_queue chemin_effetue(CheminMin chemin_min,t_queue file);
 t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y);
 void afficher_chemin(t_stack stack_x, t_stack stack_y);

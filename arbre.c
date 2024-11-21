@@ -10,6 +10,7 @@
 #define max_mouv 5
 #define nb_enfant_max 4
 
+// Variables globales pour suivre les limites des mouvements disponibles
 int avant_10 = 22;
 int avant_20 = 15;
 int avant_30 = 7;
@@ -19,29 +20,44 @@ int tourner_180 = 7;
 int arriere = 7;
 
 
-
+/**
+ * @brief Crée un nouveau nœud pour l'arbre.
+ * @param pos La position associée au nœud.
+ * @param valeur La valeur associée au nœud.
+ * @return Un pointeur vers le nouveau nœud créé.
+ */
 Node* create_node(t_localisation pos, int valeur) {
-    Node *new_node = (Node *) malloc(sizeof(Node));
-    new_node->pos = pos;
-    new_node->valeur = valeur;
-    new_node->num_children = 0;
-    for (int i = 0; i < nb_enfant_max; i++){
-        new_node->children[i] = NULL;}
+    Node *new_node = (Node *) malloc(sizeof(Node)); // Allocation mémoire pour le nœud
+    new_node->pos = pos; // Initialisation de la position
+    new_node->valeur = valeur; // Initialisation de la valeur
+    new_node->num_children = 0; // Aucun enfant au début
+    for (int i = 0; i < nb_enfant_max; i++) {
+        new_node->children[i] = NULL; // Initialisation des enfants à NULL
+    }
     return new_node;
 }
 
+/**
+ * @brief Génère un nombre aléatoire entre 1 et 7.
+ * @return Le nombre aléatoire généré.
+ */
 int nb_aleatoire(){
     int random_number = (rand() % 7) + 1;
     printf("\nNombre aléatoire entre 1 et 7 : %d", random_number);
 
     return random_number;}
 
-
+/**
+ * @brief Sélectionne un mouvement aléatoire en fonction d'une valeur donnée.
+ *        Diminue le compteur global du mouvement sélectionné.
+ * @param valeur_mouv La valeur aléatoire pour choisir un mouvement.
+ * @return Le mouvement sélectionné.
+ */
 t_move mouv_aleatoire(int valeur_mouv){
     switch (valeur_mouv){
         case 1 : {
             if (avant_10 == 0) {
-                return (mouv_aleatoire(nb_aleatoire()));
+                return (mouv_aleatoire(nb_aleatoire()));// Réitère si le mouvement n'est plus disponible
             } else {
                 avant_10--;
                 printf("\nF10 ");
@@ -105,34 +121,51 @@ t_move mouv_aleatoire(int valeur_mouv){
 
     }
 }
+
+/**
+ * @brief Vérifie le nombre de mouvements disponibles par rapport à un niveau donné.
+ * @param niveau Le niveau requis de mouvements.
+ * @return Le nombre total de mouvements disponibles ou un code spécifique.
+ */
 int verifier(int niveau){
     int total = avant_10+avant_20+avant_30+arriere+tourner_gauche+tourner_droite+tourner_180;
     if (total==0){
-        return 5;
+        return 5; // Retourne 5 si tous les mouvements sont épuisés
     }
     else if (total<niveau){
-        return total ;
+        return total ; // Retourne le total si inférieur au niveau requis
     }
     else{
-        return 6;
+        return 6; // Sinon, retourne 6
     }
 }
 
+/**
+ * @brief Crée une liste de 9 mouvements aléatoires.
+ * @return Un tableau de 9 mouvements aléatoires.
+ */
 int* liste_mouve_9(){
     int* liste = (int*) malloc(9 * sizeof(int));
     if (liste == NULL) {
         fprintf(stderr, "Erreur d'allocation mémoire pour liste_mouve_9\n");
         return NULL;}
     for (int i =0; i<9; i++){
-        liste[i]= nb_aleatoire();
+        liste[i]= nb_aleatoire();// Génère un nombre aléatoire pour chaque mouvement
     }
     return liste;
 }
 
+/**
+ * @brief Génère une liste de mouvements possibles en fonction de la position et de la carte.
+ * @param pos La position actuelle du robot.
+ * @param map La carte utilisée pour calculer les mouvements.
+ * @param move Une liste de valeurs aléatoires pour générer les mouvements.
+ * @return Un tableau de mouvements possibles.
+ */
 t_move* liste_mouve(t_localisation pos, t_map map,int* move){
     int niveau = 5;
     if (reg_case(pos,map)==1){
-        niveau = 4;}
+        niveau = 4;}// Réduit le nombre de mouvement si la case est une case Reg
     t_move* liste = (t_move*) malloc(niveau * sizeof(t_move));
 
     if (liste == NULL) {
@@ -147,7 +180,7 @@ t_move* liste_mouve(t_localisation pos, t_map map,int* move){
 
     for (int i = 0; i < niveau; i++) {
         int random_index = rand() % (9 - i);
-        liste[i] = mouv_aleatoire(tmp[random_index]);
+        liste[i] = mouv_aleatoire(tmp[random_index]); // Choix d'un mouvement aléatoire
 
         tmp[random_index] = tmp[8 - i];}
 
@@ -155,44 +188,51 @@ t_move* liste_mouve(t_localisation pos, t_map map,int* move){
 }
 
 
-#include <stdbool.h>
-
+/**
+ * @brief Génère l'arbre complet à partir d'une position initiale et d'une carte.
+ * @param arbre La racine de l'arbre.
+ * @param position_actuel La position actuelle du robot.
+ * @param map La carte utilisée pour générer l'arbre.
+ * @param chemin_min Un pointeur pour stocker le chemin minimal trouvé.
+ */
 void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, CheminMin* chemin_min) {
+    //détermine si la case de départ est une case REG
     if (reg_case(position_actuel, map) == 1) {
     }
-
+    // Liste des mouvements aléatoires
     int* mouv9 = liste_mouve_9();
     t_move *liste_des_mouvements  = liste_mouve(position_actuel, map, mouv9);
 
+    // Initialisation des variables locales
     t_move mouv, mouv2, mouv3, mouv4, mouv5;
     t_localisation localisation_actuel, localisation_2, localisation_3, localisation_4, localisation_5;
     int cost[3];
     int nb_mouv = max_mouv;
-
-
     bool used_mouv[nb_mouv];
 
+    // Boucle pour explorer les mouvements possibles
     for (int i = 0; i < 5; i++) {
         mouv = liste_des_mouvements[i];
         used_mouv[i] = true;
 
-        cost_case_adj(position_actuel, map, mouv, cost);
+        cost_case_adj(position_actuel, map, mouv, cost); // Calcule le coût du mouvement
         localisation_actuel.pos.x = cost[1];
         localisation_actuel.pos.y = cost[2];
         localisation_actuel.ori = orientation_cost_case(position_actuel, map, mouv);
 
-        Node* child = create_node(localisation_actuel, cost[0]);
+        Node* child = create_node(localisation_actuel, cost[0]); // Crée un nœud enfant
         arbre->children[arbre->num_children] = child;
         arbre->num_children++;
 
         if (cost[0] == 0) {
+            // Base trouvé
             chemin_min->valeur_min = cost[0];
             chemin_min->profondeur = 1;
             chemin_min->nodes[0] = arbre;
             chemin_min->nodes[1] = child;
             return;
         }
-        if (cost[0]>100) continue;
+        if (cost[0]>100) continue; // Ignore les mouvements avec un coût élevé tel que le dehors de map ou les crevasses
 
         for (int j = 0; j < 5; j++) {
             if (used_mouv[j]) continue;
@@ -207,7 +247,7 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
             localisation_2.pos.y = cost[2];
             localisation_2.ori = orientation_cost_case(localisation_actuel, map, mouv2);
 
-            Node* petit_enfant = create_node(localisation_2, cost[0]);
+            Node* petit_enfant = create_node(localisation_2, cost[0]); // Crée un enfant du niveau suivant
             child->children[child->num_children] = petit_enfant;
             child->num_children++;
 
@@ -311,21 +351,25 @@ void arbre_complet(Node* arbre, t_localisation position_actuel, t_map map, Chemi
                         }
 
                     }
+                    // réinitialisation des mouvements à la profondeur 4
                     for (int a =0;a<5;a++){
                         if (a==i || a== j || a == m) continue; {
                             used_mouv[a] = false;}
                     }
                 }
+                // réinitialisation des mouvements à la profondeur 3
                 for (int b =0;b<5;b++){
                     if (b==i || b== j ) continue; {
                         used_mouv[b] = false;}
                 }
             }
+            // réinitialisation des mouvements à la profondeur 2
             for (int c =0;c<5;c++){
                 if (c==i) continue; {
                     used_mouv[c] = false;}
             }
         }
+        // réinitialisation des mouvements à la profondeur 1
         for (int d = 0; d < nb_mouv; d++) {
             used_mouv[d] = false;
         }
@@ -400,6 +444,7 @@ void arbre_recurcif(Node* arbre, int niveau, t_localisation position_actuel, t_m
     free(mouv9);
 }
 
+// Affichage d'un noeud
 void afficher_node(Node *node, int profondeur) {
     // Indenter selon la profondeur
     for (int i = 0; i < profondeur; i++) {
@@ -416,6 +461,10 @@ void afficher_node(Node *node, int profondeur) {
     }
 }
 
+/**
+ * @brief Affiche l'ensemble de l'arbre, en parcourant chaque nœud à partir de la racine.
+ * @param racine La racine de l'arbre à afficher.
+ */
 void afficher_arbre(Node *racine) {
     if (racine == NULL) {
         printf("L'arbre est vide.\n");
@@ -426,6 +475,12 @@ void afficher_arbre(Node *racine) {
     afficher_node(racine, 0); // Commence à la racine avec une profondeur de 0
 }
 
+/**
+ * @brief Crée une carte aléatoire et l'enregistre dans un fichier. La carte contient des valeurs aléatoires entre 1 et 3,
+ *        avec une position aléatoire contenant la valeur 0.
+ * @param largeur La largeur de la carte.
+ * @param hauteur La hauteur de la carte.
+ */
 void créer_carte(int largeur, int hauteur) {
     // Ouvrir le fichier en mode écriture
     FILE* fichier = fopen("..\\maps\\fonction_creation_map.map", "w");
@@ -458,7 +513,12 @@ void créer_carte(int largeur, int hauteur) {
     printf("---------------------------------------------------------------------\n");
     printf("Fichier map créé!\n");
 }
-void display_arbre(t_map map){
+
+/**
+ * @brief Affiche les informations d'une carte, y compris les sols, les coûts, et un dessin visuel.
+ * @param map La carte à afficher.
+ */
+void display_carte(t_map map){
     printf("Map created with dimensions %d x %d\n", map.y_max, map.x_max);
     for (int i = 0; i < map.y_max; i++)
     {
@@ -480,6 +540,12 @@ void display_arbre(t_map map){
     displayMap(map);
 }
 
+/**
+ * @brief Ajoute les positions des nœuds dans le chemin minimal à une file (queue).
+ * @param chemin_min La structure contenant le chemin minimal.
+ * @param file La file où les positions seront ajoutées.
+ * @return La file mise à jour avec les positions.
+ */
 t_queue chemin_effetue(CheminMin chemin_min,t_queue file){
     for (int i =0; i<chemin_min.profondeur;i++){
         enqueue(&file, chemin_min.nodes[i]->pos.pos);
@@ -487,6 +553,13 @@ t_queue chemin_effetue(CheminMin chemin_min,t_queue file){
     return file;
 }
 
+/**
+ * @brief Enregistre les coordonnées (x, y) des nœuds du chemin minimal dans deux piles distinctes.
+ * @param chemin La structure contenant le chemin minimal.
+ * @param stack_x La pile où les coordonnées x seront ajoutées.
+ * @param stack_y La pile où les coordonnées y seront ajoutées.
+ * @return Les piles mises à jour avec les coordonnées.
+ */
 t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y){
     for (int i = 0; i<=chemin.profondeur; i++){
         push(&stack_x, chemin.nodes[i]->pos.pos.x);
@@ -494,6 +567,11 @@ t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y){
     }
 }
 
+/**
+ * @brief Affiche le chemin parcouru par le robot, en utilisant les coordonnées enregistrées dans deux piles.
+ * @param stack_x La pile contenant les coordonnées x.
+ * @param stack_y La pile contenant les coordonnées y.
+ */
 void afficher_chemin(t_stack stack_x, t_stack stack_y){
     for (int i = 0; i < stack_x.nbElts; i++) {
         printf(" x = %d ; y = %d \n",stack_x.values[i],stack_y.values[i]);

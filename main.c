@@ -40,27 +40,34 @@ int main() {
     }
     displayMap(map);
 
+    //-------------------------------------------------------------------------------
+    // MAIN FAIT PAR LE GROUPE //
 
-
+    // localisation initial en dure ou aleatoire
+    //int x = rand() % 7 ou hauteur;
+    //int y = rand() % 6 ou largeur;
+    //int ori = rand() % 4;
     t_localisation position_actuel = {5, 4, 0}; // (x, y, orientation)
+    //t_localisation position_actuel = {x, y, ori}; // (x, y, orientation)
 
     // Créer la racine de l'arbre
     Node* arbre = create_node(position_actuel, 0);
 
-    // Struct pour stocker le chemin minimal
+    // Initialisation de la structure pour stocker le chemin minimal
     CheminMin chemin_min;
     chemin_min.valeur_min = 10000; // Valeur initiale haute pour la comparaison
     chemin_min.profondeur = 0;
 
+    // Taille pour la map créé
     int largeur = 5;
     int hauteur = 5;
 
     // Appel de la fonction pour générer et écrire la carte
     créer_carte(largeur, hauteur);
     mapcree =createMapFromFile("..\\maps\\fonction_creation_map.map");
-    display_arbre(mapcree);
+    display_carte(mapcree);
 
-    // Utilisation de `arbre_complet`
+    // Début pour créer l'arbre
     printf("Début ");
     arbre_complet(arbre, position_actuel, map, &chemin_min);
 
@@ -72,10 +79,6 @@ int main() {
         push(&stack_y, chemin_min.nodes[i]->pos.pos.y);
     }
 
-    // localisation initial en dure ou aleatoire
-    //int x = rand() % 7 ou hauteur;
-    //int y = rand() % 6 ou largeur;
-    //int ori = rand() % 4;
 
     loc_init(position_actuel.pos.x,position_actuel.pos.y,position_actuel.ori);
     while (chemin_min.valeur_min != 0 ){
@@ -84,6 +87,7 @@ int main() {
         position_actuel.ori = chemin_min.nodes[chemin_min.profondeur]->pos.ori;
         Node* arbre = create_node(position_actuel, 0);
         arbre_complet(arbre, position_actuel, map, &chemin_min);
+        // affiche le chemin que fait le robot met que pour l'arbre actuel
         for (int i = 1; i<=chemin_min.profondeur; i++){
             printf("valeurs n°%d x = %d y = %d\n",i ,chemin_min.nodes[i]->pos.pos.x,chemin_min.nodes[i]->pos.pos.y);
             push(&stack_x, chemin_min.nodes[i]->pos.pos.x);
@@ -91,9 +95,6 @@ int main() {
         }
         afficher_arbre(arbre);
         chemin_effetue(chemin_min,file);
-
-
-
     }
     afficher_chemin(stack_x,stack_y);
     printf("Termine !");
