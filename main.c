@@ -8,7 +8,8 @@ int main() {
     srand(time(NULL));
     t_map map, mapcree;
     t_queue file = createQueue(100);
-
+    t_stack stack_x = createStack(100);
+    t_stack stack_y = createStack(100);
 
     // The following preprocessor directive checks if the code is being compiled on a Windows system.
     // If either _WIN32 or _WIN64 is defined, it means we are on a Windows platform.
@@ -64,7 +65,11 @@ int main() {
     printf(" la feuille avec le meilleur cout est à %d \n", chemin_min.valeur_min);
     // Affichage de l'arbre complet
     afficher_arbre(arbre);
-
+    for (int i = 0; i<=chemin_min.profondeur; i++){
+        printf("valeurs n°%d x = %d y = %d\n",i ,chemin_min.nodes[i]->pos.pos.x,chemin_min.nodes[i]->pos.pos.y);
+        push(&stack_x, chemin_min.nodes[i]->pos.pos.x);
+        push(&stack_y, chemin_min.nodes[i]->pos.pos.y);
+    }
     // localisation initial en dure ou aleatoire
     //int x = rand() % 7 ou hauteur;
     //int y = rand() % 6 ou largeur;
@@ -73,19 +78,23 @@ int main() {
     loc_init(position_actuel.pos.x,position_actuel.pos.y,position_actuel.ori);
     printf("Début ");
     while (chemin_min.valeur_min != 0 ){
-
-        printf("T");
         position_actuel.pos.x = chemin_min.nodes[chemin_min.profondeur]->pos.pos.x;
         position_actuel.pos.y = chemin_min.nodes[chemin_min.profondeur]->pos.pos.y;
         position_actuel.ori = chemin_min.nodes[chemin_min.profondeur]->pos.ori;
-        printf("A");
         Node* arbre = create_node(position_actuel, 0);
         arbre_complet(arbre, position_actuel, map, &chemin_min);
-        printf("B");
+        for (int i = 1; i<=chemin_min.profondeur; i++){
+            printf("valeurs n°%d x = %d y = %d\n",i ,chemin_min.nodes[i]->pos.pos.x,chemin_min.nodes[i]->pos.pos.y);
+            push(&stack_x, chemin_min.nodes[i]->pos.pos.x);
+            push(&stack_y, chemin_min.nodes[i]->pos.pos.y);
+        }
         afficher_arbre(arbre);
         chemin_effetue(chemin_min,file);
-    }
 
+
+
+    }
+    afficher_chemin(stack_x,stack_y);
     printf("Termine !");
     return 0;
 }

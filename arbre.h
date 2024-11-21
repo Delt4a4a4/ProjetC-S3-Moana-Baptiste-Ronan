@@ -42,5 +42,7 @@ void afficher_arbre(Node *racine);
 void créer_carte(int largeur, int hauteur);
 void display_arbre(t_map map);
 t_queue chemin_effetue(CheminMin chemin_min,t_queue file);
+t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y);
+void afficher_chemin(t_stack stack_x, t_stack stack_y);
 
 #endif //UNTITLED1_ARBRE_H

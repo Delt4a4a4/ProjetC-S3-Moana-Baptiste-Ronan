@@ -488,3 +488,16 @@ t_queue chemin_effetue(CheminMin chemin_min,t_queue file){
     }
     return file;
 }
+
+t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y){
+    for (int i = 0; i<=chemin.profondeur; i++){
+        push(&stack_x, chemin.nodes[i]->pos.pos.x);
+        push(&stack_y, chemin.nodes[i]->pos.pos.y);
+    }
+}
+
+void afficher_chemin(t_stack stack_x, t_stack stack_y){
+    for (int i = 0; i < stack_x.nbElts; i++) {
+        printf(" x = %d ; y = %d \n",stack_x.values[i],stack_y.values[i]);
+    }
+}
