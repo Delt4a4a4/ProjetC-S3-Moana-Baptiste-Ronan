@@ -24,7 +24,7 @@ Assurez-vous d'avoir les outils suivants installés sur votre machine :
 
 Fichier arbre.h :
 
-Node* create_node(t_localisation pos, int valeur);
+Node* create_node(t_localisation pos, int valeur); \n
 int nb_aleatoire();
 t_move mouv_aleatoire(int valeur_mouv);
 int verifier(int niveau);
