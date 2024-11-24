@@ -53,39 +53,6 @@ int erg_case(int pos_x,int pos_y,t_map map);
 void erg_deplacement(t_move mouvement_a_ajuster, int pos_x, int pos_y,t_orientation ori_robot,t_map map, int donnees[3]);  
 int reg_case(t_localisation position, t_map map);  
 
-#### Fichier loc.h :
-
-t_localisation loc_init(int, int, t_orientation);
-int isValidLocalisation(t_position, int, int);
-t_position LEFT(t_position);
-t_position RIGHT(t_position);
-t_position UP(t_position);
-t_position DOWN(t_position);
-
-#### Fichier map.h : 
-
-t_map createMapFromFile(char *);
-t_map createTrainingMap();
-void displayMap(t_map);
-
-#### Fichier moves.h :
-
-char *getMoveAsString(t_move move);
-t_localisation move(t_localisation, t_move);
-void updateLocalisation(t_localisation *, t_move);
-
-#### Fichier queue.h :
-
-t_queue createQueue(int);
-void enqueue(t_queue *,t_position);
-t_position dequeue(t_queue *);
-
-#### Fichier stack.h :
-
-t_stack createStack(int);
-void push(t_stack *, int);
-int pop(t_stack *);
-int top(t_stack);
 
 ### Equipe : 
 Projet fait par : Moana Wong, Baptiste Bertrand et Ronan Mychalski.
