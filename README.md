@@ -45,7 +45,7 @@ t_stack chemin(CheminMin chemin,t_stack stack_x, t_stack stack_y);
 void afficher_chemin(t_stack stack_x, t_stack stack_y);  
 
 
-# Fichier chemin.h :
+#### Fichier chemin.h :
  
 void cost_case_adj(t_localisation position, t_map map,t_move mouvement, int donnees[3]);  
 t_orientation orientation_cost_case (t_localisation position, t_map map,t_move mouvement);  
