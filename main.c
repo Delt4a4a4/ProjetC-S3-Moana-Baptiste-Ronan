@@ -2,6 +2,7 @@
 #include "map.h"
 #include "arbre.h"
 #include "chemin.h"
+#include <time.h>
 
 
 int main() {
@@ -62,6 +63,8 @@ int main() {
     int largeur = 5;
     int hauteur = 5;
 
+
+
     // Appel de la fonction pour générer et écrire la carte
     créer_carte(largeur, hauteur);
     mapcree =createMapFromFile("..\\maps\\fonction_creation_map.map");
@@ -69,7 +72,11 @@ int main() {
 
     // Début pour créer l'arbre
     printf("Début ");
+    clock_t start = clock();  // Début du chronométrage
     arbre_complet(arbre, position_actuel, map, &chemin_min);
+    clock_t end = clock();    // Fin du chronométrage
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC; // Temps écoulé en secondes
+
 
     // Affichage de l'arbre complet
     afficher_arbre(arbre);
@@ -98,6 +105,7 @@ int main() {
     }
     afficher_chemin(stack_x,stack_y);
     printf("Termine !");
+    printf("La fonction a pris %f secondes.\n", time_spent);
     return 0;
 }
 
