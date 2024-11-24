@@ -23,7 +23,7 @@ Assurez-vous d'avoir les outils suivants installés sur votre machine :
 
 - Un compilateur C
 
-### Fonction créée
+### Fonctions créées
 
 
 #### Fichier arbre.h :
