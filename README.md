@@ -1,6 +1,7 @@
 # ProjetC-S3
 ## Rover Run
 
+
 ## Description
 
 Une brève description du projet. Par exemple :
@@ -19,7 +20,7 @@ Assurez-vous d'avoir les outils suivants installés sur votre machine :
 
 - Un compilateur C
 
-### fonction créé 
+### Fonction créée
 
 
 Fichier arbre.h :
@@ -83,3 +84,5 @@ void push(t_stack *, int);
 int pop(t_stack *);
 int top(t_stack);
 
+### Equipe : 
+Projet fait par : Moana Wong, Baptiste Bertrand et Ronan Mychalski.
