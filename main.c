@@ -104,8 +104,8 @@ int main() {
         chemin_effetue(chemin_min,file);
     }
     afficher_chemin(stack_x,stack_y);
-    printf("Termine !");
-    printf("La fonction a pris %f secondes.\n", time_spent);
+    printf("Termine !\n");
+    printf("La fonction création d'un arbre et le calcule du meilleur chemin a pris %f secondes.\n", time_spent);
     return 0;
 }
 
