@@ -53,6 +53,10 @@ int erg_case(int pos_x,int pos_y,t_map map);
 void erg_deplacement(t_move mouvement_a_ajuster, int pos_x, int pos_y,t_orientation ori_robot,t_map map, int donnees[3]);  
 int reg_case(t_localisation position, t_map map);  
 
+#### Bibliotèque utilisé 
+
+time.h
+
 
 ### Equipe : 
 Projet fait par : Moana Wong, Baptiste Bertrand et Ronan Mychalski.
